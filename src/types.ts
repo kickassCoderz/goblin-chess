@@ -15,8 +15,8 @@ export enum Player {
 }
 
 export const playerName = {
-    [Player.White]: 'White',
-    [Player.Black]: 'Black'
+    [Player.White]: 'Green',
+    [Player.Black]: 'Red'
 }
 
 export const piecePower = {
@@ -47,7 +47,8 @@ export type RenderBoardProps = {
     state: BoardState
     selectedSquare?: SquareId
     onSquareClick: ({ square, squareState }: { square: SquareId; squareState: [Player, Piece] }) => void
-    battle?: BattleState
+    battle?: BattleState,
+    currentPlayer: Player,
 }
 
 export type BattleState = {
@@ -64,36 +65,46 @@ export const oWhite = (piece: Piece): OwnedPiece => `${Player.White}${piece}`
 export const oBlack = (piece: Piece): OwnedPiece => `${Player.Black}${piece}`
 
 export const initialBoardState: BoardState = {
-    '0,0': oWhite(Piece.Rook),
-    '0,1': oWhite(Piece.Knight),
-    '0,2': oWhite(Piece.Bishop),
-    '0,3': oWhite(Piece.Queen),
-    '0,4': oWhite(Piece.King),
-    '0,5': oWhite(Piece.Bishop),
-    '0,6': oWhite(Piece.Knight),
-    '0,7': oWhite(Piece.Rook),
-    '1,0': oWhite(Piece.Pawn),
-    '1,1': oWhite(Piece.Pawn),
-    '1,2': oWhite(Piece.Pawn),
-    '1,3': oWhite(Piece.Pawn),
-    '1,4': oWhite(Piece.Pawn),
-    '1,5': oWhite(Piece.Pawn),
-    '1,6': oWhite(Piece.Pawn),
-    '1,7': oWhite(Piece.Pawn),
-    '6,0': oBlack(Piece.Pawn),
-    '6,1': oBlack(Piece.Pawn),
-    '6,2': oBlack(Piece.Pawn),
-    '6,3': oBlack(Piece.Pawn),
-    '6,4': oBlack(Piece.Pawn),
-    '6,5': oBlack(Piece.Pawn),
-    '6,6': oBlack(Piece.Pawn),
-    '6,7': oBlack(Piece.Pawn),
-    '7,0': oBlack(Piece.Rook),
-    '7,1': oBlack(Piece.Knight),
-    '7,2': oBlack(Piece.Bishop),
-    '7,3': oBlack(Piece.Queen),
-    '7,4': oBlack(Piece.King),
-    '7,5': oBlack(Piece.Bishop),
-    '7,6': oBlack(Piece.Knight),
-    '7,7': oBlack(Piece.Rook)
+    '0,0': oBlack(Piece.Rook),
+    '0,1': oBlack(Piece.Knight),
+    '0,2': oBlack(Piece.Bishop),
+    '0,3': oBlack(Piece.Queen),
+    '0,4': oBlack(Piece.King),
+    '0,5': oBlack(Piece.Bishop),
+    '0,6': oBlack(Piece.Knight),
+    '0,7': oBlack(Piece.Rook),
+    '1,0': oBlack(Piece.Pawn),
+    '1,1': oBlack(Piece.Pawn),
+    '1,2': oBlack(Piece.Pawn),
+    '1,3': oBlack(Piece.Pawn),
+    '1,4': oBlack(Piece.Pawn),
+    '1,5': oBlack(Piece.Pawn),
+    '1,6': oBlack(Piece.Pawn),
+    '1,7': oBlack(Piece.Pawn),
+    '6,0': oWhite(Piece.Pawn),
+    '6,1': oWhite(Piece.Pawn),
+    '6,2': oWhite(Piece.Pawn),
+    '6,3': oWhite(Piece.Pawn),
+    '6,4': oWhite(Piece.Pawn),
+    '6,5': oWhite(Piece.Pawn),
+    '6,6': oWhite(Piece.Pawn),
+    '6,7': oWhite(Piece.Pawn),
+    '7,0': oWhite(Piece.Rook),
+    '7,1': oWhite(Piece.Knight),
+    '7,2': oWhite(Piece.Bishop),
+    '7,3': oWhite(Piece.Queen),
+    '7,4': oWhite(Piece.King),
+    '7,5': oWhite(Piece.Bishop),
+    '7,6': oWhite(Piece.Knight),
+    '7,7': oWhite(Piece.Rook)
+}
+
+export enum PieceState {
+    Idle = 'Idle',
+    Ready = 'Ready',
+}
+
+export type RenderPieceProps = {
+    piece: Piece,
+    state: PieceState,
 }

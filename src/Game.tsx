@@ -259,6 +259,7 @@ If you lose the battle your piece is destroyed and it's your opponents turn.
                     selectedSquare={selectedSquare}
                     onSquareClick={onSquareClick}
                     battle={battle}
+                    currentPlayer={currentPlayer}
                 />
                 <div className={styles.boardBottom}>
                     <div className={styles.boardInner}>

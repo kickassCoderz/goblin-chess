@@ -32,6 +32,9 @@
     text-align: center;
     font-weight: bold;
     cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .squareWhite {
@@ -111,4 +114,36 @@
     background-color: #085c1f;
     font-weight: bold;
     cursor: pointer;
+}
+
+@keyframes pawnIdleAnimation {
+    0% {
+      transform:rotate(0deg);
+      transform-origin: bottom;
+    }
+    50% {
+       transform:rotate(6deg);
+       transform-origin: bottom;
+    }
+    100% {
+      transform: rotate(0deg);
+      transform-origin: bottom;
+    }
+  }
+
+.pieceImage {
+    width: 70px;
+    height: 70px;
+}
+
+.pieceImage.pieceState-Ready {
+    animation: pawnIdleAnimation 1s infinite linear alternate;
+}
+
+.squareWhite .pieceImage {
+    filter: hue-rotate(0deg);
+}
+
+.squareBlack .pieceImage {
+    filter: hue-rotate(260deg);
 }
