@@ -200,9 +200,10 @@ If you lose the battle your piece is destroyed and it's your opponents turn.
 
     return (
         <div className={styles.root}>
-            <h1>Goblin Chess</h1>
+            {/* <h1>{gameName}</h1>
             <p>Kill the King to win (marked with K)</p>
-            <h2>{currentPlayerName}&apos;s turn</h2>
+            <h2>{currentPlayerName}&apos;s turn</h2> */}
+            <div className={styles.logo} />
             {battle && (
                 <>
                     <br />
@@ -240,7 +241,6 @@ If you lose the battle your piece is destroyed and it's your opponents turn.
                     </div>
                 </>
             )}
-            <br />
             <div className={styles.board}>
                 <div className={styles.boardTop}>
                     <div className={styles.boardInner}>

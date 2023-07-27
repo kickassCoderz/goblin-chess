@@ -4,14 +4,20 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    max-width: 800px;
+    width: 100%;
+    background-image: url("./assets/backgrounds/game_background_1_top.png"), url("./assets/backgrounds/game_background_1_repeat.png"), url("./assets/backgrounds/game_background_1_bottom.png");
+    background-repeat: no-repeat, repeat-y, no-repeat;
+    background-position: top, center, bottom;
 }
 
 .board {
+    width: 100%;
     margin: 0 auto;
     display: grid;
     grid-gap: 0;
-    grid-template-columns: repeat(8, 70px);
-    grid-template-rows: 40px repeat(8, 70px) 40px;
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: 0.60fr repeat(8, 1fr) 0.60fr;
     grid-auto-flow: row;
 }
 
@@ -22,10 +28,10 @@
     grid-template-rows: auto;
     grid-auto-flow: row;
     align-items: strech;
+    font-size: clamp(1rem, 2.5vw, 2rem); 
 }
 
 .square {
-    padding: 20px;
     font-size: 150%;
     background-color: #32a852;
     color: #000;
@@ -35,6 +41,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow: hidden;
 }
 
 .squareWhite {
@@ -132,8 +139,8 @@
   }
 
 .pieceImage {
-    width: 70px;
-    height: 70px;
+    width: 100%;
+    height: auto;
 }
 
 .pieceImage.pieceState-Ready {
@@ -146,4 +153,15 @@
 
 .squareBlack .pieceImage {
     filter: hue-rotate(260deg);
+}
+
+.logo {
+    display: flex;
+    flex: 0.5;
+    margin: auto;
+    width: 100%;
+    background-image: url(./assets/logo.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
 }

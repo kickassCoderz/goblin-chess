@@ -108,3 +108,5 @@ export type RenderPieceProps = {
     piece: Piece,
     state: PieceState,
 }
+
+export const gameName = 'Goblin Chess'
