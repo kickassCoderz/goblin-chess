@@ -110,3 +110,15 @@ export type RenderPieceProps = {
 }
 
 export const gameName = 'Goblin Chess'
+
+export type UseAudioProps = {
+    src: string
+}
+
+export type UseAudioPause = () => void
+export type UseAudioPlay = () => UseAudioPause
+
+export type UseAudio = {
+    play: UseAudioPlay
+    pause: UseAudioPause
+}

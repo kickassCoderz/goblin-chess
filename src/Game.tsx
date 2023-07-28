@@ -3,7 +3,8 @@ import {  useCallback, useEffect, useState } from 'react'
 import { Piece, Player, BoardState, SquareId, RenderBoardProps, piecePower, playerName, BattleState, pieceName, initialBoardState } from './types'
 import { RenderBoard } from './components'
 import { notify, getReachableFields, getPiece } from './utils'
-import { useBackgroundAudio } from './hooks'
+import { useAudio } from './hooks'
+import backgroundSound1 from './assets/sounds/background_1.mp3'
 
 let seenBattleModeTutorial = false
 
@@ -13,7 +14,7 @@ const Game = () => {
     const [currentPlayer, setCurrentPlayer] = useState<Player>(Player.White)
     const currentPlayerName = playerName[currentPlayer]
     const [battle, setBattle] = useState<BattleState>()
-    useBackgroundAudio()
+    const { play: playBackgroundAudio } = useAudio({ src: backgroundSound1 })
 
     const endTurn = useCallback(
         () =>
@@ -199,6 +200,14 @@ If you lose the battle your piece is destroyed and it's your opponents turn.
             endTurn()
         }
     }, [battle, score, endTurn])
+
+    useEffect(() => {
+        const pause = playBackgroundAudio()
+
+        return () => {
+            pause()
+        }
+    }, [playBackgroundAudio])
 
     return (
         <div className={styles.root}>

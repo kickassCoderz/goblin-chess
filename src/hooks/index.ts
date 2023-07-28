@@ -1,1 +1,1 @@
-export * from './useBackgroundAudio'
+export * from './useAudio'
