@@ -3,6 +3,7 @@ import {  useCallback, useEffect, useState } from 'react'
 import { Piece, Player, BoardState, SquareId, RenderBoardProps, piecePower, playerName, BattleState, pieceName, initialBoardState } from './types'
 import { RenderBoard } from './components'
 import { notify, getReachableFields, getPiece } from './utils'
+import { useBackgroundAudio } from './hooks'
 
 let seenBattleModeTutorial = false
 
@@ -12,6 +13,7 @@ const Game = () => {
     const [currentPlayer, setCurrentPlayer] = useState<Player>(Player.White)
     const currentPlayerName = playerName[currentPlayer]
     const [battle, setBattle] = useState<BattleState>()
+    useBackgroundAudio()
 
     const endTurn = useCallback(
         () =>
