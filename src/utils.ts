@@ -1,7 +1,7 @@
-import { SquareId, BoardState, boardSize, OwnedPiece, Player, Piece } from "./types"
+import { SquareId, BoardState, boardSize, OwnedPiece, Player, Piece } from './types'
 
 export const getReachableFields = (selectedSquare: SquareId, state: BoardState, distance: number): SquareId[] => {
-  const [x, y] = selectedSquare.split(',').map(Number)
+    const [x, y] = selectedSquare.split(',').map(Number)
     const [selectedPlayer] = getPiece(state[selectedSquare])
     const fields: SquareId[] = []
 

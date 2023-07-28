@@ -14,26 +14,29 @@ const getAudio = (src: string) => {
 }
 
 export const useAudio = ({ src }: UseAudioProps): UseAudio => {
-    const play = useCallback(({ loop = false }: { loop?: boolean } = {}) => {
-        const audio = getAudio(src)
-        audio.loop = loop
+    const play = useCallback(
+        ({ loop = false }: { loop?: boolean } = {}) => {
+            const audio = getAudio(src)
+            audio.loop = loop
 
-        const playAudio = () => {
-            didInteractWithGame = true
+            const playAudio = () => {
+                didInteractWithGame = true
 
-            audio.play()
-        }
+                audio.play()
+            }
 
-        if (didInteractWithGame) {
-            playAudio()
-        } else {
-            document.body.addEventListener('mousedown', playAudio, { once: true })
-        }
+            if (didInteractWithGame) {
+                playAudio()
+            } else {
+                document.body.addEventListener('mousedown', playAudio, { once: true })
+            }
 
-        return () => {
-            audio.pause()
-        }
-    }, [src])
+            return () => {
+                audio.pause()
+            }
+        },
+        [src]
+    )
 
     const pause = useCallback(() => {
         const audio = getAudio(src)

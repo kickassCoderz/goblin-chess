@@ -47,8 +47,8 @@ export type RenderBoardProps = {
     state: BoardState
     selectedSquare?: SquareId
     onSquareClick: ({ square, squareState }: { square: SquareId; squareState: [Player, Piece] }) => void
-    battle?: BattleState,
-    currentPlayer: Player,
+    battle?: BattleState
+    currentPlayer: Player
 }
 
 export type BattleState = {
@@ -101,12 +101,12 @@ export const initialBoardState: BoardState = {
 
 export enum PieceState {
     Idle = 'Idle',
-    Ready = 'Ready',
+    Ready = 'Ready'
 }
 
 export type RenderPieceProps = {
-    piece: Piece,
-    state: PieceState,
+    piece: Piece
+    state: PieceState
 }
 
 export const gameName = 'Goblin Chess'

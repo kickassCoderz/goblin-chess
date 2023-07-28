@@ -1,6 +1,17 @@
 import styles from './Game.module.css'
-import {  useCallback, useEffect, useState } from 'react'
-import { Piece, Player, BoardState, SquareId, RenderBoardProps, piecePower, playerName, BattleState, pieceName, initialBoardState } from './types'
+import { useCallback, useEffect, useState } from 'react'
+import {
+    Piece,
+    Player,
+    BoardState,
+    SquareId,
+    RenderBoardProps,
+    piecePower,
+    playerName,
+    BattleState,
+    pieceName,
+    initialBoardState
+} from './types'
 import { RenderBoard } from './components'
 import { notify, getReachableFields, getPiece } from './utils'
 import { useAudio } from './hooks'
