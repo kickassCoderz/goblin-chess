@@ -14,7 +14,7 @@
 
 .board {
     width: 100%;
-    margin: 0 auto;
+    margin-top: auto;
     display: grid;
     grid-gap: 0;
     grid-template-columns: repeat(8, 1fr);
@@ -85,6 +85,10 @@
     grid-column-end: 9;
     grid-row-start: 10;
     grid-row-end: 10;
+}
+
+.boardDisabled {
+    pointer-events: none;
 }
 
 .square:nth-child(-2n+9),
@@ -192,10 +196,10 @@
     filter: hue-rotate(260deg);
 }
 
-.logo {
+.logoBackground {
     display: flex;
     flex: 0.5;
-    margin: auto;
+    margin: auto auto 0 auto;
     width: 100%;
     background-image: url(./assets/logo.png);
     background-size: contain;
@@ -211,4 +215,53 @@
     background-color: #8c9b37;
     border-radius: 20px;
     border: 5px solid #65462d;
+    display: flex;
+}
+
+.gameStart {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+.logoImage {
+    width: 50%;
+    height: auto;
+    object-fit: cover;
+}
+
+.gameStart h1 {
+    margin: 0 0 10px 0;
+}
+
+.gameStart p {
+    margin: 0 0 20px 0;
+}
+
+.gameStart p:last-child {
+    margin: 20px 0 0 0;
+    font-style: italic;
+    font-size: 0.8rem;
+}
+
+.button {
+    font-size: 1.2rem;
+    font-weight: bold;
+    background-color: #085c1f;
+    border-radius: 15px;
+    padding: 10px 20px;
+    box-shadow: none;
+    border: 2px solid #000000;
+    cursor: pointer;
+}
+
+.button:active {
+    background-color: #12792e;
+}
+
+.gameStart .button {
+    font-size: 1.6rem;
 }

@@ -10,7 +10,8 @@ import {
     playerName,
     BattleState,
     pieceName,
-    initialBoardState
+    initialBoardState,
+    gameName
 } from './types'
 import { RenderBoard } from './components'
 import { notify, getReachableFields, getPiece } from './utils'
@@ -20,10 +21,12 @@ import rock from './assets/battle/rock.png'
 import paper from './assets/battle/paper.png'
 import scissors from './assets/battle/scissors.png'
 import { composeCssClass } from '@kickass-coderz/utils'
+import Logo from './assets/logo.png'
 
 let seenBattleModeTutorial = false
 
 const Game = () => {
+    const [isGameStarted, setGameStarted] = useState(false)
     const [state, setState] = useState<BoardState>(() => ({ ...initialBoardState }))
     const [selectedSquare, setSelectedSquare] = useState<SquareId>()
     const [currentPlayer, setCurrentPlayer] = useState<Player>(Player.White)
@@ -226,10 +229,8 @@ If you lose the battle your piece is destroyed and it's your opponents turn.
 
     return (
         <div className={styles.root}>
-            {/* <h1>{gameName}</h1>
-            <p>Kill the King to win (marked with K)</p>
-            <h2>{currentPlayerName}&apos;s turn</h2> */}
-            <div className={styles.logo} />
+            {/* <h2>{currentPlayerName}&apos;s turn</h2> */}
+            {isGameStarted && <div className={styles.logoBackground} />}
             {battle && (
                 <div className={styles.modal}>
                     <div className={styles.fight}>
@@ -269,7 +270,7 @@ If you lose the battle your piece is destroyed and it's your opponents turn.
                     </div>
                 </div>
             )}
-            <div className={styles.board}>
+            <div className={composeCssClass(styles.board, !isGameStarted && styles.boardDisabled)}>
                 <div className={styles.boardTop}>
                     <div className={styles.boardInner}>
                         <div className={styles.squareInner}>Z</div>
@@ -302,6 +303,25 @@ If you lose the battle your piece is destroyed and it's your opponents turn.
                     </div>
                 </div>
             </div>
+            {!isGameStarted && (
+                <div className={styles.modal}>
+                    <div className={styles.gameStart}>
+                        <img className={styles.logoImage} src={Logo} alt={gameName} />
+                        <h1>Welcome</h1>
+                        <p>This is an ancient game with few twists. Destroy your opponent&apos;s King to win.</p>
+                        <button
+                            className={styles.button}
+                            type="button"
+                            onClick={() => {
+                                setGameStarted(true)
+                            }}
+                        >
+                            Start game
+                        </button>
+                        <p>Requires 2 players</p>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }
