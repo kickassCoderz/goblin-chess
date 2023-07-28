@@ -116,7 +116,7 @@ export type UseAudioProps = {
 }
 
 export type UseAudioPause = () => void
-export type UseAudioPlay = () => UseAudioPause
+export type UseAudioPlay = ({ loop }: { loop: boolean }) => UseAudioPause
 
 export type UseAudio = {
     play: UseAudioPlay

@@ -220,7 +220,7 @@ If you lose the battle your piece is destroyed and it's your opponents turn.
     }, [battle, score, endTurn])
 
     useEffect(() => {
-        const pause = playBackgroundAudio()
+        const pause = playBackgroundAudio({ loop: true })
 
         return () => {
             pause()

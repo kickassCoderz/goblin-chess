@@ -15,7 +15,7 @@ const getAudio = (src: string) => {
 
 export const useAudio = ({ src }: UseAudioProps): UseAudio => {
     const play = useCallback(
-        ({ loop = false }: { loop?: boolean } = {}) => {
+        ({ loop = false }) => {
             const audio = getAudio(src)
             audio.loop = loop
 
