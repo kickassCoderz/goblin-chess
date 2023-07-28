@@ -16,6 +16,10 @@ import { RenderBoard } from './components'
 import { notify, getReachableFields, getPiece } from './utils'
 import { useAudio } from './hooks'
 import backgroundSound1 from './assets/sounds/background_1.mp3'
+import rock from './assets/battle/rock.png'
+import paper from './assets/battle/paper.png'
+import scissors from './assets/battle/scissors.png'
+import { composeCssClass } from '@kickass-coderz/utils'
 
 let seenBattleModeTutorial = false
 
@@ -227,41 +231,43 @@ If you lose the battle your piece is destroyed and it's your opponents turn.
             <h2>{currentPlayerName}&apos;s turn</h2> */}
             <div className={styles.logo} />
             {battle && (
-                <>
-                    <br />
+                <div className={styles.modal}>
                     <div className={styles.fight}>
                         <h2>Battle mode</h2>
-                        <p>Current player: {currentBattlePlayer}</p>
-
-                        <p>Note: Hide the phone from other player while making a choice</p>
+                        <p className={styles.figthCurrentPlayerText}>{currentBattlePlayer}&apos;s turn, choose sign:</p>
                         <div className={styles.fightMoves}>
-                            <div
-                                className={styles.fightMove}
-                                onClick={() => {
-                                    onFightMoveClick('rock')
-                                }}
-                            >
-                                Rock
+                            <div className={styles.fightMovesRow}>
+                                <div
+                                    className={composeCssClass(styles.fightMove, styles.fightMoveRock)}
+                                    onClick={() => {
+                                        onFightMoveClick('rock')
+                                    }}
+                                >
+                                    <img className={styles.fightMoveImage} src={rock} alt="rock" />
+                                </div>
+                                <div
+                                    className={composeCssClass(styles.fightMove, styles.fightMovePaper)}
+                                    onClick={() => {
+                                        onFightMoveClick('paper')
+                                    }}
+                                >
+                                    <img className={styles.fightMoveImage} src={paper} alt="paper" />
+                                </div>
                             </div>
                             <div
-                                className={styles.fightMove}
-                                onClick={() => {
-                                    onFightMoveClick('paper')
-                                }}
-                            >
-                                Paper
-                            </div>
-                            <div
-                                className={styles.fightMove}
+                                className={composeCssClass(styles.fightMove, styles.fightMoveScissors)}
                                 onClick={() => {
                                     onFightMoveClick('scissors')
                                 }}
                             >
-                                Scissors
+                                <img className={styles.fightMoveImage} src={scissors} alt="scissors" />
                             </div>
                         </div>
+                        <p className={styles.fightNote}>
+                            Tip: Hide the device from other player while making a choice!
+                        </p>
                     </div>
-                </>
+                </div>
             )}
             <div className={styles.board}>
                 <div className={styles.boardTop}>

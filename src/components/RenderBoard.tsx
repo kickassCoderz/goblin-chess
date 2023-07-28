@@ -22,7 +22,7 @@ export const RenderBoard = ({
         const [player, piece] = getPiece(square)
         let pieceState = PieceState.Idle
 
-        if (player === currentPlayer) {
+        if (player === currentPlayer || battle?.attackedSquareState.id === squareId) {
             pieceState = PieceState.Ready
         }
 

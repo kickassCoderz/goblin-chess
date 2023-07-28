@@ -1,5 +1,6 @@
 .root {
     display: flex;
+    position: relative;
     flex: 1;
     flex-direction: column;
     justify-content: center;
@@ -58,7 +59,7 @@
 }
 
 .squareSelected {
-    border: 1px solid #ff0000;
+    border: 2px solid #ff0000;
 }
 
 .squareOption {
@@ -102,10 +103,12 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    text-align: center;
 }
 
 .fight h2 {
-    margin: 0;
+    margin: 0 0 10px 0;
+    font-size: 2rem;
 }
 
 .fightMoves {
@@ -113,14 +116,30 @@
     justify-content: center;
     align-items: center;
     gap: 20px;
+    flex-direction: column;
+}
+
+.fightMovesRow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
 }
 
 .fightMove {
-    padding: 20px;
-    box-sizing: border-box;
-    background-color: #085c1f;
     font-weight: bold;
     cursor: pointer;
+    background-color: #7e8b31;
+    padding: 5px;
+    border-radius: 20px;
+}
+
+.fightMove:active {
+    background-color: #5f6b1a;
+}
+
+.fightMoveScissors {
+    width: 50%;
 }
 
 @keyframes pawnIdleAnimation {
@@ -136,7 +155,25 @@
       transform: rotate(0deg);
       transform-origin: bottom;
     }
-  }
+}
+
+.figthCurrentPlayerText {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin: 0 0 20px 0;
+}
+
+.fightNote {
+    font-size: 0.8rem;
+    font-style: italic;
+    margin: 20px 0 0 0;
+}
+
+.fightMoveImage {
+    width: 50%;
+    height: auto;
+    object-fit: cover;
+}
 
 .pieceImage {
     width: 100%;
@@ -164,4 +201,14 @@
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
+}
+
+.modal {
+    position: absolute;
+    z-index: 100;
+    width: 80%;
+    padding: 20px;
+    background-color: #8c9b37;
+    border-radius: 20px;
+    border: 5px solid #65462d;
 }
