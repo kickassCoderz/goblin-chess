@@ -10,6 +10,12 @@
     background-image: url("./assets/backgrounds/game_background_1_top.png"), url("./assets/backgrounds/game_background_1_repeat.png"), url("./assets/backgrounds/game_background_1_bottom.png");
     background-repeat: no-repeat, repeat-y, no-repeat;
     background-position: top, center, bottom;
+    background-size: contain, contain, contain;
+}
+
+.boardWrapper {
+    width: 100%;
+    margin-top: auto; 
 }
 
 .board {

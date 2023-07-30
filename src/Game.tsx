@@ -308,41 +308,45 @@ If you lose the battle your piece is destroyed${
                 </div>
             )}
             <div
-                className={composeCssClass(styles.board, !isGameStarted && styles.boardDisabled)}
-                style={{
-                    pointerEvents: isMyTurn ? 'all' : 'none'
+                className={styles.boardWrapper}
+                onClick={() => {
+                    if (!isMyTurn && !battle && isGameStarted) {
+                        notify("It is your opponent's turn!", setNotification)
+                    }
                 }}
             >
-                <div className={styles.boardTop}>
-                    <div className={styles.boardInner}>
-                        <div className={styles.squareInner}>Z</div>
-                        <div className={styles.squareInner}>Y</div>
-                        <div className={styles.squareInner}>X</div>
-                        <div className={styles.squareInner}>W</div>
-                        <div className={styles.squareInner}>V</div>
-                        <div className={styles.squareInner}>U</div>
-                        <div className={styles.squareInner}>T</div>
-                        <div className={styles.squareInner}>S</div>
+                <div className={composeCssClass(styles.board, (!isMyTurn || !isGameStarted) && styles.boardDisabled)}>
+                    <div className={styles.boardTop}>
+                        <div className={styles.boardInner}>
+                            <div className={styles.squareInner}>Z</div>
+                            <div className={styles.squareInner}>Y</div>
+                            <div className={styles.squareInner}>X</div>
+                            <div className={styles.squareInner}>W</div>
+                            <div className={styles.squareInner}>V</div>
+                            <div className={styles.squareInner}>U</div>
+                            <div className={styles.squareInner}>T</div>
+                            <div className={styles.squareInner}>S</div>
+                        </div>
                     </div>
-                </div>
-                <RenderBoard
-                    state={state}
-                    selectedSquare={selectedSquare}
-                    onSquareClick={onSquareClick}
-                    battle={battle}
-                    currentPlayer={currentPlayer}
-                    player={player}
-                />
-                <div className={styles.boardBottom}>
-                    <div className={styles.boardInner}>
-                        <div className={styles.squareInner}>Z</div>
-                        <div className={styles.squareInner}>Y</div>
-                        <div className={styles.squareInner}>X</div>
-                        <div className={styles.squareInner}>W</div>
-                        <div className={styles.squareInner}>V</div>
-                        <div className={styles.squareInner}>U</div>
-                        <div className={styles.squareInner}>T</div>
-                        <div className={styles.squareInner}>S</div>
+                    <RenderBoard
+                        state={state}
+                        selectedSquare={selectedSquare}
+                        onSquareClick={onSquareClick}
+                        battle={battle}
+                        currentPlayer={currentPlayer}
+                        player={player}
+                    />
+                    <div className={styles.boardBottom}>
+                        <div className={styles.boardInner}>
+                            <div className={styles.squareInner}>Z</div>
+                            <div className={styles.squareInner}>Y</div>
+                            <div className={styles.squareInner}>X</div>
+                            <div className={styles.squareInner}>W</div>
+                            <div className={styles.squareInner}>V</div>
+                            <div className={styles.squareInner}>U</div>
+                            <div className={styles.squareInner}>T</div>
+                            <div className={styles.squareInner}>S</div>
+                        </div>
                     </div>
                 </div>
             </div>
