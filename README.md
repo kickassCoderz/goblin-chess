@@ -1,5 +1,7 @@
 # Goblin Chess Game
 
+This is an ancient game with few twists. Destroy your opponent's King to win.
+
 ## Credits
 
 ### Music

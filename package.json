@@ -1,5 +1,6 @@
 {
   "name": "goblin-chess",
+  "description": "This is an ancient game with few twists. Destroy your opponent's King to win.",
   "private": true,
   "version": "0.0.0",
   "type": "module",
