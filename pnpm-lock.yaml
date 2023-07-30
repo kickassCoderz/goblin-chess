@@ -26,6 +26,9 @@ dependencies:
   react-dom:
     specifier: ^18.2.0
     version: 18.2.0(react@18.2.0)
+  rune-games-sdk:
+    specifier: ^4.11.3
+    version: 4.11.3
 
 devDependencies:
   '@types/react':
@@ -52,12 +55,18 @@ devDependencies:
   eslint-plugin-react-refresh:
     specifier: ^0.4.3
     version: 0.4.3(eslint@8.45.0)
+  eslint-plugin-rune:
+    specifier: ^0.1.10
+    version: 0.1.10(eslint@8.45.0)
   typescript:
     specifier: ^5.0.2
     version: 5.0.2
   vite:
     specifier: ^4.4.5
     version: 4.4.5
+  vite-plugin-rune:
+    specifier: ^0.1.1
+    version: 0.1.1(rune-games-sdk@4.11.3)(vite@4.4.5)
 
 packages:
 
@@ -675,6 +684,9 @@ packages:
   /balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
 
+  /base-64@1.0.0:
+    resolution: {integrity: sha512-kwDPIFCGx0NZHog36dj+tHiwP4QMzsZ3AgMViUBKI0+V5n4U0ufTCUMhnQ04diaRI8EX/QcPfql7zlhZ7j4zgg==}
+
   /big-integer@1.6.51:
     resolution: {integrity: sha512-GPEid2Y9QU1Exl1rpO9B2IPJGHPSupF5GnVIP0blYvNOMer2bTvSWs1jGOUg04hTmu67nmLsQ9TBo1puaotBHg==}
     engines: {node: '>=0.6'}
@@ -728,6 +740,10 @@ packages:
 
   /concat-map@0.0.1:
     resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
+
+  /core-js@3.31.1:
+    resolution: {integrity: sha512-2sKLtfq1eFST7l7v62zaqXacPc7uG8ZAya8ogijLhTtaKNcpzpB4TMoTw2Si+8GYKRwFPMMtUT0263QFWFfqyQ==}
+    requiresBuild: true
 
   /cross-spawn@7.0.3:
     resolution: {integrity: sha512-iRDPJKUPVEND7dHPO8rkbOnPpyDygcDFtWjpeWNCgy8WP2rXcxXL8TskReQl6OrB2G7+UJrags1q15Fudc7G6w==}
@@ -874,6 +890,15 @@ packages:
 
   /eslint-plugin-react-refresh@0.4.3(eslint@8.45.0):
     resolution: {integrity: sha512-Hh0wv8bUNY877+sI0BlCUlsS0TYYQqvzEwJsJJPM2WF4RnTStSnSR3zdJYa2nPOJgg3UghXi54lVyMSmpCalzA==}
+    peerDependencies:
+      eslint: '>=7'
+    dependencies:
+      eslint: 8.45.0
+    dev: true
+
+  /eslint-plugin-rune@0.1.10(eslint@8.45.0):
+    resolution: {integrity: sha512-meAj8E64CKCGWPdH5q7KdWxEcVEKU+va7Mnzo+kqi6Tw7nnk1Vh0vVzavLQyMr9didhqmyOGL1mW324Gnsnpbg==}
+    engines: {node: ^14.17.0 || ^16.0.0 || >= 18.0.0}
     peerDependencies:
       eslint: '>=7'
     dependencies:
@@ -1152,6 +1177,9 @@ packages:
   /ignore@5.2.4:
     resolution: {integrity: sha512-MAb38BcSbH0eHNBxn7ql2NH/kX33OkB3lZ1BNdh7ENeRChHTYsTvWrMubiIAMNS2llXEEgZ1MUOBtXChP3kaFQ==}
     engines: {node: '>= 4'}
+
+  /immer@10.0.1:
+    resolution: {integrity: sha512-zg++jJLsKKTwXGeSYIw0HgChSYQGtu0UDTnbKx5aGLYgte4CwTmH9eJDYyQ6FheyUtBe+lQW9FrGxya1G+Dtmg==}
 
   /import-fresh@3.3.0:
     resolution: {integrity: sha512-veYYhQa+D1QBKznvhUHxb8faxlrwUnxseDAbAp457E0wLNio2bOSKnjYDhMj+YiAq61xrMGhQk9iXVk5FzgQMw==}
@@ -1508,6 +1536,19 @@ packages:
     dependencies:
       queue-microtask: 1.2.3
 
+  /rune-games-sdk@4.11.3:
+    resolution: {integrity: sha512-4oIS5bDHY7dxH/2WtDgZ4Dxzi0zf3iRbQnjhkfpd/iaOLjPgvjtNQUIcJMuISpvOL/XIkz6H0Vx9+EJnHLyXrw==}
+    dependencies:
+      base-64: 1.0.0
+      core-js: 3.31.1
+      immer: 10.0.1
+      rune-msgpack: 1.0.0
+      xstate: 4.32.1
+
+  /rune-msgpack@1.0.0:
+    resolution: {integrity: sha512-LAs357MySa4eDJ/GewuBizHllx8C9/hFvwjwkWPNgv8X0HraHLROE+E8oFFc5L0tGPgyrTbvvfQVVzOc/y7dfw==}
+    engines: {node: '>= 14'}
+
   /scheduler@0.23.0:
     resolution: {integrity: sha512-CtuThmgHNg7zIZWAXi3AsyIzA3n4xx7aNyjwC2VJldO2LMVDhFK+63xGqq6CsJH4rTAt6/M+N4GhZiDYPx9eUw==}
     dependencies:
@@ -1633,6 +1674,17 @@ packages:
     dependencies:
       punycode: 2.3.0
 
+  /vite-plugin-rune@0.1.1(rune-games-sdk@4.11.3)(vite@4.4.5):
+    resolution: {integrity: sha512-12z683PzoX5PIvaWMXqnD0oMIgAmDH7EEJFp31jHzlHsofFZL68IaorwiHQSK0mYmKlRmpLBr1oEG0yHeI7ANQ==}
+    engines: {node: ^14.17.0 || ^16.0.0 || >= 18.0.0}
+    peerDependencies:
+      rune-games-sdk: '>=4.9.0'
+      vite: ^4
+    dependencies:
+      rune-games-sdk: 4.11.3
+      vite: 4.4.5
+    dev: true
+
   /vite@4.4.5:
     resolution: {integrity: sha512-4m5kEtAWHYr0O1Fu7rZp64CfO1PsRGZlD3TAB32UmQlpd7qg15VF7ROqGN5CyqN7HFuwr7ICNM2+fDWRqFEKaA==}
     engines: {node: ^14.18.0 || >=16.0.0}
@@ -1677,6 +1729,9 @@ packages:
 
   /wrappy@1.0.2:
     resolution: {integrity: sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==}
+
+  /xstate@4.32.1:
+    resolution: {integrity: sha512-QYUd+3GkXZ8i6qdixnOn28bL3EvA++LONYL/EMWwKlFSh/hiLndJ8YTnz77FDs+JUXcwU7NZJg7qoezoRHc4GQ==}
 
   /yallist@4.0.0:
     resolution: {integrity: sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==}

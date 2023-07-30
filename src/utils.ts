@@ -35,6 +35,6 @@ export const getPiece = (piece: OwnedPiece): [Player, Piece] => {
     return (piece || '').split('') as [Player, Piece]
 }
 
-export const notify = (message: string) => {
-    alert(message)
+export const notify = (message: string, handler: (message: string) => void) => {
+    handler(message)
 }

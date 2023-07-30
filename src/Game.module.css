@@ -179,6 +179,20 @@
     object-fit: cover;
 }
 
+.fightScore {
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 0 0 20px 0;
+}
+
+.fightScore-W {
+    color: #466f26;
+}
+
+.fightScore-B {
+    color: #c94b4b;
+}
+
 .pieceImage {
     width: 100%;
     height: auto;
@@ -216,6 +230,7 @@
     border-radius: 20px;
     border: 5px solid #65462d;
     display: flex;
+    justify-content: center;
 }
 
 .gameStart {
@@ -267,4 +282,18 @@
 
 .gameStart .button {
     font-size: 1.6rem;
+}
+
+.notification {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.notification p {
+    margin: 0 0 20px 0;
+    max-height: 60vh;
+    overflow: scroll;
 }

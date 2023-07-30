@@ -10,7 +10,8 @@ export const RenderBoard = ({
     selectedSquare,
     onSquareClick,
     battle,
-    currentPlayer
+    currentPlayer,
+    player
 }: RenderBoardProps): ReactElement => {
     const board: ReactElement[] = []
     const fieldsInRadiusOfPower = selectedSquare
@@ -19,10 +20,10 @@ export const RenderBoard = ({
 
     const render = ({ squareId }: { squareId: SquareId }) => {
         const square = state[squareId]
-        const [player, piece] = getPiece(square)
+        const [piecePlayer, piece] = getPiece(square)
         let pieceState = PieceState.Idle
 
-        if (player === currentPlayer || battle?.attackedSquareState.id === squareId) {
+        if (piecePlayer === currentPlayer || battle?.attackedSquareState.id === squareId) {
             pieceState = PieceState.Ready
         }
 
@@ -31,14 +32,13 @@ export const RenderBoard = ({
                 key={squareId}
                 className={composeCssClass(
                     styles.square,
-                    player === Player.White ? styles.squareWhite : styles.squareBlack,
+                    piecePlayer === Player.White ? styles.squareWhite : styles.squareBlack,
                     selectedSquare === squareId && styles.squareSelected,
                     battle?.attackedSquareState.id === squareId && styles.squareSelected,
-                    !battle && fieldsInRadiusOfPower.includes(squareId) && styles.squareOption,
-                    player === Player.White ? styles.squareWhite : styles.squareBlack
+                    !battle && fieldsInRadiusOfPower.includes(squareId) && styles.squareOption
                 )}
                 onClick={() => {
-                    onSquareClick({ square: squareId, squareState: [player, piece] })
+                    onSquareClick({ square: squareId, squareState: [piecePlayer, piece] })
                 }}
             >
                 <RenderPiece state={pieceState} piece={piece} />
@@ -46,7 +46,7 @@ export const RenderBoard = ({
         )
     }
 
-    const reverseBoard = currentPlayer === Player.Black
+    const reverseBoard = player === Player.Black
 
     if (reverseBoard) {
         for (let i = boardSize[0] - 1; i >= 0; i--) {

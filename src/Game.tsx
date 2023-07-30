@@ -14,7 +14,7 @@ import {
     gameName
 } from './types'
 import { RenderBoard } from './components'
-import { notify, getReachableFields, getPiece } from './utils'
+import { getReachableFields, getPiece, notify } from './utils'
 import { useAudio } from './hooks'
 import backgroundSound1 from './assets/sounds/background_1.mp3'
 import rock from './assets/battle/rock.png'
@@ -30,9 +30,11 @@ const Game = () => {
     const [state, setState] = useState<BoardState>(() => ({ ...initialBoardState }))
     const [selectedSquare, setSelectedSquare] = useState<SquareId>()
     const [currentPlayer, setCurrentPlayer] = useState<Player>(Player.White)
-    const currentPlayerName = playerName[currentPlayer]
     const [battle, setBattle] = useState<BattleState>()
     const { play: playBackgroundAudio } = useAudio({ src: backgroundSound1 })
+    const [player, setPlayer] = useState<Player>()
+    const isMyTurn = currentPlayer === player
+    const [notification, setNotification] = useState<string>()
 
     const endTurn = useCallback(
         () =>
@@ -42,7 +44,7 @@ const Game = () => {
 
     const onSquareClick: RenderBoardProps['onSquareClick'] = ({ square, squareState }) => {
         if (battle) {
-            notify('Finish the battle first to continue')
+            notify('Finish the battle first!', setNotification)
 
             return
         }
@@ -69,9 +71,9 @@ const Game = () => {
 
         if (!allowedFields.includes(square)) {
             if (nextSquarePlayer === currentPlayer) {
-                notify('You cannot move to a square occupied by your own piece')
+                notify('You cannot move to a square occupied by your own piece!', setNotification)
             } else {
-                notify('You cannot move to this square')
+                notify('This square is out of reach!', setNotification)
             }
 
             return
@@ -85,36 +87,13 @@ const Game = () => {
                 player1TargetScore: piecePower[nextSquarePiece],
                 player2TargetScore: piecePower[selectedSquarePiece],
                 attackingSquareState: { id: selectedSquare, state: getPiece(state[selectedSquare]) },
-                attackedSquareState: { id: square, state: squareState }
+                attackedSquareState: { id: square, state: squareState },
+                player1Score: 0,
+                player2Score: 0
             }
 
             setBattle(battleState)
-
-            if (!seenBattleModeTutorial) {
-                notify(`
-You will now play rock paper scissors to determine the winner of the battle! (scroll this prompt to read more)
-
-Since you are battling against the ${pieceName[nextSquarePiece]} (power: ${
-                    piecePower[nextSquarePiece]
-                }), you need to win ${piecePower[nextSquarePiece]} times to win the battle.
-
-Since you are fighting with the ${pieceName[selectedSquarePiece]} (power: ${
-                    piecePower[selectedSquarePiece]
-                }), your opponent needs to win ${piecePower[selectedSquarePiece]} times to win the battle.
-
-Different pieces have different levels of power. The power of a piece is the number of times you need to win rock paper scissors to kill it.
-
-Pieces powers are:
-${Object.entries(piecePower)
-    .map(([piece, power]) => `${pieceName[piece as Piece]}: ${power}`)
-    .join('\n')}
-
-If you win the battle opponents piece is destroyed and you get to move to the square it was occupying.
-
-If you lose the battle your piece is destroyed and it's your opponents turn.
-                `)
-                seenBattleModeTutorial = true
-            }
+            Rune.actions.startBattle(battleState)
         } else {
             setState(prevState => {
                 const nextState = { ...prevState } as BoardState
@@ -126,98 +105,42 @@ If you lose the battle your piece is destroyed and it's your opponents turn.
             })
             setSelectedSquare(undefined)
             endTurn()
+            Rune.actions.movePiece({ squareId: selectedSquare, newSquareId: square })
         }
     }
 
-    const [score, setScore] = useState([0, 0])
-    const [playerMoves, setPlayerMoves] = useState<string[]>([])
+    const playerMoves = [battle?.player1Move, battle?.player2Move].filter(Boolean)
+
     const currentBattlePlayer =
-        playerMoves.length === 0
-            ? currentPlayerName
-            : playerName[currentPlayer === Player.White ? Player.Black : Player.White]
+        playerMoves.length === 0 ? currentPlayer : currentPlayer === Player.White ? Player.Black : Player.White
 
     const onFightMoveClick = (playerMove: string) => {
-        setPlayerMoves(current => [...current, playerMove])
-    }
+        if (currentPlayer === Player.White) {
+            setBattle(current => {
+                if (!current) {
+                    return undefined
+                }
 
-    useEffect(() => {
-        if (!battle) {
-            return
-        }
-
-        if (playerMoves.length < 2) {
-            return
-        }
-
-        const { player1, player2 } = battle
-        const [player1Move, player2Move] = playerMoves
-
-        if (player1Move === player2Move) {
-            notify('Draw!')
-        } else if (
-            (player1Move === 'rock' && player2Move === 'scissors') ||
-            (player1Move === 'paper' && player2Move === 'rock') ||
-            (player1Move === 'scissors' && player2Move === 'paper')
-        ) {
-            setScore(prevScore => [prevScore[0] + 1, prevScore[1]])
-            notify(`${playerName[player1]} wins this round!`)
+                return {
+                    ...current,
+                    player1Move: playerMove
+                }
+            })
         } else {
-            setScore(prevScore => [prevScore[0], prevScore[1] + 1])
-            notify(`${playerName[player2]} wins this round!`)
-        }
+            setBattle(current => {
+                if (!current) {
+                    return undefined
+                }
 
-        setPlayerMoves([])
-    }, [battle, playerMoves])
-
-    useEffect(() => {
-        if (!battle) {
-            return
-        }
-
-        const { player1TargetScore, player2TargetScore, attackingSquareState, attackedSquareState, player1, player2 } =
-            battle
-
-        const endBattle = ({ killedState }: { killedState: [Player, Piece] }) => {
-            if (killedState[1] === Piece.King) {
-                const winner = killedState[0] === Player.White ? Player.Black : Player.White
-
-                notify(`${playerName[winner]} wins the game! (game will now restart)`)
-                window.location.reload()
-            }
-
-            setBattle(undefined)
-            setScore([0, 0])
-            setPlayerMoves([])
-            setSelectedSquare(undefined)
-        }
-
-        if (score[0] === player1TargetScore) {
-            notify(`${playerName[player1]} wins the battle!`)
-            setState(prevState => {
-                const nextState = { ...prevState } as BoardState
-
-                delete nextState[attackingSquareState.id]
-                nextState[attackedSquareState.id] = prevState[attackingSquareState.id]
-
-                return nextState
+                return {
+                    ...current,
+                    player1Move: playerMove
+                }
             })
-
-            endBattle({ killedState: attackedSquareState.state })
-            endTurn()
-        } else if (score[1] === player2TargetScore) {
-            notify(`${playerName[player2]} wins the battle!`)
-            setState(prevState => {
-                const nextState = { ...prevState } as BoardState
-
-                delete nextState[attackingSquareState.id]
-
-                return nextState
-            })
-
-            endBattle({ killedState: attackingSquareState.state })
-            endTurn()
         }
-    }, [battle, score, endTurn])
+
+        Rune.actions.makeBattleMove({ playerMove })
+    }
 
     useEffect(() => {
         const pause = playBackgroundAudio({ loop: true })
@@ -227,50 +150,169 @@ If you lose the battle your piece is destroyed and it's your opponents turn.
         }
     }, [playBackgroundAudio])
 
+    useEffect(() => {
+        Rune.initClient({
+            onChange: ({ newGame, oldGame, yourPlayerId }) => {
+                if (!yourPlayerId) {
+                    setCurrentPlayer(newGame.currentPlayer)
+                } else {
+                    setCurrentPlayer(newGame.currentPlayer)
+                    setPlayer(newGame.players[yourPlayerId])
+                }
+
+                setState(newGame.board)
+                setBattle(newGame.battle)
+                setSelectedSquare(newGame.selectedSquare)
+
+                if (newGame.notification && newGame.notification.timestamp != oldGame.notification?.timestamp) {
+                    setNotification(newGame.notification.message)
+                }
+            }
+        })
+    }, [])
+
+    useEffect(() => {
+        if (!battle) {
+            return
+        }
+
+        const { player1, attackedSquareState, attackingSquareState } = battle
+        const isAttacking = player1 === player
+
+        if (!seenBattleModeTutorial) {
+            notify(
+                `
+You will now play "Rock Paper Scissors" to determine the winner of the battle!
+
+Since you ${isAttacking ? 'attacked' : 'have been attacked by'} the ${
+                    pieceName[isAttacking ? attackedSquareState.state[1] : attackingSquareState.state[1]]
+                } (power: ${
+                    piecePower[isAttacking ? attackedSquareState.state[1] : attackingSquareState.state[1]]
+                }), you need to win ${
+                    piecePower[isAttacking ? attackedSquareState.state[1] : attackingSquareState.state[1]]
+                } times to win the battle.
+<br /><br />
+Since your opponent ${isAttacking ? 'is attacked by' : 'has attacked'} your ${
+                    pieceName[isAttacking ? attackingSquareState.state[1] : attackedSquareState.state[1]]
+                } (power: ${
+                    piecePower[isAttacking ? attackingSquareState.state[1] : attackedSquareState.state[1]]
+                }), your opponent needs to win ${
+                    piecePower[isAttacking ? attackingSquareState.state[1] : attackedSquareState.state[1]]
+                } times to win the battle.
+<br /><br />
+Different pieces have different levels of power. The power of a piece is the number of times you need to win "Rock Paper Scissors" to kill it.
+<br /><br />
+Pieces powers are:
+<br />
+${Object.entries(piecePower)
+    .map(([piece, power]) => `${pieceName[piece as Piece]}: ${power}`)
+    .join('<br />')}
+<br /><br />
+If you win the battle your opponents piece is ${
+                    isAttacking ? 'destroyed and you get to move to the square it was occupying' : 'destroyed'
+                }.
+
+If you lose the battle your piece is destroyed${
+                    isAttacking ? '' : ' and your opponent gets to move to the square it was occupying'
+                }. After battle ${isAttacking ? 'your turn is over' : 'it is your turn'}.
+            `,
+                setNotification
+            )
+
+            seenBattleModeTutorial = true
+        }
+    }, [battle, player])
+
+    const isMyBattleTurn = currentBattlePlayer === player
+
     return (
-        <div className={styles.root}>
+        <div
+            className={styles.root}
+            style={{
+                pointerEvents: player ? 'all' : 'none'
+            }}
+        >
             {/* <h2>{currentPlayerName}&apos;s turn</h2> */}
             {isGameStarted && <div className={styles.logoBackground} />}
-            {battle && (
+            {isGameStarted && notification && (
                 <div className={styles.modal}>
-                    <div className={styles.fight}>
-                        <h2>Battle mode</h2>
-                        <p className={styles.figthCurrentPlayerText}>{currentBattlePlayer}&apos;s turn, choose sign:</p>
-                        <div className={styles.fightMoves}>
-                            <div className={styles.fightMovesRow}>
-                                <div
-                                    className={composeCssClass(styles.fightMove, styles.fightMoveRock)}
-                                    onClick={() => {
-                                        onFightMoveClick('rock')
-                                    }}
-                                >
-                                    <img className={styles.fightMoveImage} src={rock} alt="rock" />
-                                </div>
-                                <div
-                                    className={composeCssClass(styles.fightMove, styles.fightMovePaper)}
-                                    onClick={() => {
-                                        onFightMoveClick('paper')
-                                    }}
-                                >
-                                    <img className={styles.fightMoveImage} src={paper} alt="paper" />
-                                </div>
-                            </div>
-                            <div
-                                className={composeCssClass(styles.fightMove, styles.fightMoveScissors)}
-                                onClick={() => {
-                                    onFightMoveClick('scissors')
-                                }}
-                            >
-                                <img className={styles.fightMoveImage} src={scissors} alt="scissors" />
-                            </div>
-                        </div>
-                        <p className={styles.fightNote}>
-                            Tip: Hide the device from other player while making a choice!
-                        </p>
+                    <div className={styles.notification}>
+                        <p
+                            className={styles.notificationText}
+                            dangerouslySetInnerHTML={{
+                                __html: notification
+                            }}
+                        />
+                        <button
+                            className={styles.button}
+                            type="button"
+                            onClick={() => {
+                                setNotification(undefined)
+                            }}
+                        >
+                            Ok
+                        </button>
                     </div>
                 </div>
             )}
-            <div className={composeCssClass(styles.board, !isGameStarted && styles.boardDisabled)}>
+            {!notification && battle && (
+                <div
+                    className={styles.modal}
+                    style={{
+                        pointerEvents: isMyBattleTurn ? 'all' : 'none'
+                    }}
+                >
+                    <div className={styles.fight}>
+                        <h2>Battle mode</h2>
+                        <h3 className={styles.fightScore}>
+                            <span className={styles[`fightScore-${Player.White}`]}>{battle.player1Score}</span> -{' '}
+                            <span className={styles[`fightScore-${Player.Black}`]}>{battle.player2Score}</span>
+                        </h3>
+                        {isMyBattleTurn && <p className={styles.figthCurrentPlayerText}>Choose your sign</p>}
+                        {!isMyBattleTurn && (
+                            <p className={styles.figthCurrentPlayerText}>
+                                {playerName[currentBattlePlayer]} is choosing...
+                            </p>
+                        )}
+                        {isMyBattleTurn && (
+                            <div className={styles.fightMoves}>
+                                <div className={styles.fightMovesRow}>
+                                    <div
+                                        className={composeCssClass(styles.fightMove, styles.fightMoveRock)}
+                                        onClick={() => {
+                                            onFightMoveClick('rock')
+                                        }}
+                                    >
+                                        <img className={styles.fightMoveImage} src={rock} alt="rock" />
+                                    </div>
+                                    <div
+                                        className={composeCssClass(styles.fightMove, styles.fightMovePaper)}
+                                        onClick={() => {
+                                            onFightMoveClick('paper')
+                                        }}
+                                    >
+                                        <img className={styles.fightMoveImage} src={paper} alt="paper" />
+                                    </div>
+                                </div>
+                                <div
+                                    className={composeCssClass(styles.fightMove, styles.fightMoveScissors)}
+                                    onClick={() => {
+                                        onFightMoveClick('scissors')
+                                    }}
+                                >
+                                    <img className={styles.fightMoveImage} src={scissors} alt="scissors" />
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            )}
+            <div
+                className={composeCssClass(styles.board, !isGameStarted && styles.boardDisabled)}
+                style={{
+                    pointerEvents: isMyTurn ? 'all' : 'none'
+                }}
+            >
                 <div className={styles.boardTop}>
                     <div className={styles.boardInner}>
                         <div className={styles.squareInner}>Z</div>
@@ -289,6 +331,7 @@ If you lose the battle your piece is destroyed and it's your opponents turn.
                     onSquareClick={onSquareClick}
                     battle={battle}
                     currentPlayer={currentPlayer}
+                    player={player}
                 />
                 <div className={styles.boardBottom}>
                     <div className={styles.boardInner}>
@@ -316,9 +359,8 @@ If you lose the battle your piece is destroyed and it's your opponents turn.
                                 setGameStarted(true)
                             }}
                         >
-                            Start game
+                            Play
                         </button>
-                        <p>Requires 2 players</p>
                     </div>
                 </div>
             )}

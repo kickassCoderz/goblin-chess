@@ -49,6 +49,7 @@ export type RenderBoardProps = {
     onSquareClick: ({ square, squareState }: { square: SquareId; squareState: [Player, Piece] }) => void
     battle?: BattleState
     currentPlayer: Player
+    player?: Player
 }
 
 export type BattleState = {
@@ -58,6 +59,10 @@ export type BattleState = {
     player2TargetScore: number
     attackingSquareState: { id: SquareId; state: [Player, Piece] }
     attackedSquareState: { id: SquareId; state: [Player, Piece] }
+    player1Score: number
+    player2Score: number
+    player1Move?: string
+    player2Move?: string
 }
 
 export const oWhite = (piece: Piece): OwnedPiece => `${Player.White}${piece}`
