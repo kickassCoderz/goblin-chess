@@ -259,7 +259,7 @@ If you lose the battle your piece is destroyed${
                 pointerEvents: player ? 'all' : 'none'
             }}
         >
-            {isGameStarted && <div className={styles.logoBackground} />}
+            {(isGameStarted || !player) && <div className={styles.logoBackground} />}
             {(isGameStarted || isHelpNotification) && notification && (
                 <div className={styles.modal}>
                     <div className={styles.notification}>
@@ -333,7 +333,9 @@ If you lose the battle your piece is destroyed${
                     </div>
                 </div>
             )}
-            <img className={styles.helpButton} src={InfoIcon} alt="Help" title="Help" onClick={onHelpClick} />
+            {!!player && (
+                <img className={styles.helpButton} src={InfoIcon} alt="Help" title="Help" onClick={onHelpClick} />
+            )}
             <div
                 className={styles.boardWrapper}
                 onClick={() => {
@@ -377,7 +379,7 @@ If you lose the battle your piece is destroyed${
                     </div>
                 </div>
             </div>
-            {!isGameStarted && !isHelpNotification && (
+            {!!player && !isGameStarted && !isHelpNotification && (
                 <div className={styles.modal}>
                     <div className={styles.gameStart}>
                         <img className={styles.logoImage} src={Logo} alt={gameName} />
