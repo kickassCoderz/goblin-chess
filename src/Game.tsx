@@ -251,6 +251,7 @@ If you lose the battle your piece is destroyed${
     }, [battle, player])
 
     const isMyBattleTurn = currentBattlePlayer === player
+    const isPlayerAttacking = !!battle && battle.player1 === player
 
     return (
         <div
@@ -260,7 +261,7 @@ If you lose the battle your piece is destroyed${
             }}
         >
             {(isGameStarted || !player) && <div className={styles.logoBackground} />}
-            {(isGameStarted || isHelpNotification) && notification && (
+            {(isGameStarted || isHelpNotification) && !!notification && (
                 <div className={styles.modal}>
                     <div className={styles.notification}>
                         <p
@@ -281,7 +282,7 @@ If you lose the battle your piece is destroyed${
                     </div>
                 </div>
             )}
-            {!notification && battle && (
+            {isGameStarted && !notification && !!battle && (
                 <div
                     className={styles.modal}
                     style={{
@@ -296,9 +297,24 @@ If you lose the battle your piece is destroyed${
                         </h3>
                         {isMyBattleTurn && <p className={styles.figthCurrentPlayerText}>Choose your sign</p>}
                         {!isMyBattleTurn && (
-                            <p className={styles.figthCurrentPlayerText}>
-                                {playerName[currentBattlePlayer]} is choosing...
-                            </p>
+                            <>
+                                {isPlayerAttacking ? (
+                                    <p className={styles.figthCurrentPlayerText}>
+                                        {`You are attacking ${
+                                            pieceName[battle.attackedSquareState.state[1]]
+                                        } with your ${pieceName[battle.attackingSquareState.state[1]]}`}
+                                    </p>
+                                ) : (
+                                    <p className={styles.figthCurrentPlayerText}>
+                                        {`Your ${pieceName[battle.attackedSquareState.state[1]]} is being attacked by ${
+                                            playerName[battle.player1]
+                                        }'s ${pieceName[battle.attackingSquareState.state[1]]}`}
+                                    </p>
+                                )}
+                                <p className={styles.figthCurrentPlayerText}>
+                                    {playerName[currentBattlePlayer]} is choosing...
+                                </p>
+                            </>
                         )}
                         {isMyBattleTurn && (
                             <div className={styles.fightMoves}>
@@ -345,18 +361,6 @@ If you lose the battle your piece is destroyed${
                 }}
             >
                 <div className={composeCssClass(styles.board, (!isMyTurn || !isGameStarted) && styles.boardDisabled)}>
-                    <div className={styles.boardTop}>
-                        <div className={styles.boardInner}>
-                            <div className={styles.squareInner}>Z</div>
-                            <div className={styles.squareInner}>Y</div>
-                            <div className={styles.squareInner}>X</div>
-                            <div className={styles.squareInner}>W</div>
-                            <div className={styles.squareInner}>V</div>
-                            <div className={styles.squareInner}>U</div>
-                            <div className={styles.squareInner}>T</div>
-                            <div className={styles.squareInner}>S</div>
-                        </div>
-                    </div>
                     <RenderBoard
                         state={state}
                         selectedSquare={selectedSquare}
@@ -365,18 +369,6 @@ If you lose the battle your piece is destroyed${
                         currentPlayer={currentPlayer}
                         player={player}
                     />
-                    <div className={styles.boardBottom}>
-                        <div className={styles.boardInner}>
-                            <div className={styles.squareInner}>Z</div>
-                            <div className={styles.squareInner}>Y</div>
-                            <div className={styles.squareInner}>X</div>
-                            <div className={styles.squareInner}>W</div>
-                            <div className={styles.squareInner}>V</div>
-                            <div className={styles.squareInner}>U</div>
-                            <div className={styles.squareInner}>T</div>
-                            <div className={styles.squareInner}>S</div>
-                        </div>
-                    </div>
                 </div>
             </div>
             {!!player && !isGameStarted && !isHelpNotification && (

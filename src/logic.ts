@@ -181,25 +181,25 @@ Rune.initLogic({
 
                 game.battle.player1Move = undefined
                 game.battle.player2Move = undefined
-            }
 
-            const {
-                player1TargetScore,
-                player2TargetScore,
-                attackingSquareState,
-                attackedSquareState,
-                player1Score,
-                player2Score
-            } = game.battle
+                const {
+                    player1TargetScore,
+                    player2TargetScore,
+                    attackingSquareState,
+                    attackedSquareState,
+                    player1Score,
+                    player2Score
+                } = game.battle
 
-            if (player1Score === player1TargetScore) {
-                checkIfGameOver(game, attackedSquareState.id)
-                movePiece({ squareId: attackingSquareState.id, newSquareId: attackedSquareState.id }, { game })
-                endBattle(game)
-            } else if (player2Score === player2TargetScore) {
-                checkIfGameOver(game, attackingSquareState.id)
-                removePiece({ squareId: attackingSquareState.id }, { game })
-                endBattle(game)
+                if (player1Score === player1TargetScore) {
+                    checkIfGameOver(game, attackedSquareState.id)
+                    movePiece({ squareId: attackingSquareState.id, newSquareId: attackedSquareState.id }, { game })
+                    endBattle(game)
+                } else if (player2Score === player2TargetScore) {
+                    checkIfGameOver(game, attackingSquareState.id)
+                    removePiece({ squareId: attackingSquareState.id }, { game })
+                    endBattle(game)
+                }
             }
         }
     }

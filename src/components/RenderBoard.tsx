@@ -5,6 +5,9 @@ import { getReachableFields, getPiece } from '../utils'
 import styles from '../Game.module.css'
 import { RenderPiece } from '.'
 
+const columns = ['Z', 'Y', 'X', 'W', 'V', 'U', 'T', 'S']
+const reversedColumns = [...columns].reverse()
+
 export const RenderBoard = ({
     state,
     selectedSquare,
@@ -64,5 +67,29 @@ export const RenderBoard = ({
         }
     }
 
-    return <>{board}</>
+    const boardColumns = reverseBoard ? reversedColumns : columns
+
+    return (
+        <>
+            <div className={styles.boardTop}>
+                <div className={styles.boardInner}>
+                    {boardColumns.map(column => (
+                        <div key={column} className={styles.squareInner}>
+                            {column}
+                        </div>
+                    ))}
+                </div>
+            </div>
+            {board}
+            <div className={styles.boardBottom}>
+                <div className={styles.boardInner}>
+                    {boardColumns.map(column => (
+                        <div key={column} className={styles.squareInner}>
+                            {column}
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </>
+    )
 }
