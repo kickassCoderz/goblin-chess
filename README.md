@@ -10,3 +10,7 @@ This is an ancient game with few twists. Destroy your opponent's King to win.
 Music promoted by https://www.chosic.com/free-music/all/
 Creative Commons CC BY 4.0
 https://creativecommons.org/licenses/by/4.0/
+
+
+### Icons
+- [Info](https://icons8.com/icon/P7N90lIvNYPd/info) icon by [Icons8](https://icons8.com/)

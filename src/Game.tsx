@@ -22,6 +22,7 @@ import paper from './assets/battle/paper.png'
 import scissors from './assets/battle/scissors.png'
 import { composeCssClass } from '@kickass-coderz/utils'
 import Logo from './assets/logo.png'
+import InfoIcon from './assets/icons/info.png'
 
 let seenBattleModeTutorial = false
 
@@ -35,6 +36,7 @@ const Game = () => {
     const [player, setPlayer] = useState<Player>()
     const isMyTurn = currentPlayer === player
     const [notification, setNotification] = useState<string>()
+    const isHelpNotification = notification?.startsWith('You wake up')
 
     const endTurn = useCallback(
         () =>
@@ -54,6 +56,7 @@ const Game = () => {
         if (!selectedSquare) {
             if (squarePlayer === currentPlayer) {
                 setSelectedSquare(square)
+                setNotification(undefined)
             }
 
             return
@@ -142,6 +145,30 @@ const Game = () => {
         Rune.actions.makeBattleMove({ playerMove })
     }
 
+    const onHelpClick = () => {
+        notify(
+            `You wake up in the middle of the forest. After opening your eyes you see a bunch of goblins around. They tell you they are going to teach you to play Chess. This is not a regular Chess game though. Since you are playing with Goblins the rules are a little bit different.
+<br /><br />
+- all pieces can move in any direction<br />
+- pieces can not jump over other pieces<br />
+- a piece can move the amount of squares equal to its power (see below)<br />
+- if a piece moves to a square occupied by an opponent's piece, a battle starts<br />
+- in battle mode you need to win "Rock Paper Scissors" to destroy the opponent's piece<br />
+- castling does not work (too complicated for Goblins)<br />
+- to win the game destroy the opponent's king<br />
+- everything else acts as in regular Chess
+<br /><br />
+Pieces powers are:
+<br />
+${Object.entries(piecePower)
+    .map(([piece, power]) => `${pieceName[piece as Piece]}: ${power}`)
+    .join('<br />')}
+<br /><br />
+            `,
+            setNotification
+        )
+    }
+
     useEffect(() => {
         const pause = playBackgroundAudio({ loop: true })
 
@@ -200,7 +227,7 @@ Since your opponent ${isAttacking ? 'is attacked by' : 'has attacked'} your ${
                     piecePower[isAttacking ? attackingSquareState.state[1] : attackedSquareState.state[1]]
                 } times to win the battle.
 <br /><br />
-Different pieces have different levels of power. The power of a piece is the number of times you need to win "Rock Paper Scissors" to kill it.
+Different pieces have different levels of power. The power of a piece is the number of times you need to win "Rock Paper Scissors" to destroy it.
 <br /><br />
 Pieces powers are:
 <br />
@@ -232,9 +259,8 @@ If you lose the battle your piece is destroyed${
                 pointerEvents: player ? 'all' : 'none'
             }}
         >
-            {/* <h2>{currentPlayerName}&apos;s turn</h2> */}
             {isGameStarted && <div className={styles.logoBackground} />}
-            {isGameStarted && notification && (
+            {(isGameStarted || isHelpNotification) && notification && (
                 <div className={styles.modal}>
                     <div className={styles.notification}>
                         <p
@@ -307,6 +333,7 @@ If you lose the battle your piece is destroyed${
                     </div>
                 </div>
             )}
+            <img className={styles.helpButton} src={InfoIcon} alt="Help" title="Help" onClick={onHelpClick} />
             <div
                 className={styles.boardWrapper}
                 onClick={() => {
@@ -350,12 +377,18 @@ If you lose the battle your piece is destroyed${
                     </div>
                 </div>
             </div>
-            {!isGameStarted && (
+            {!isGameStarted && !isHelpNotification && (
                 <div className={styles.modal}>
                     <div className={styles.gameStart}>
                         <img className={styles.logoImage} src={Logo} alt={gameName} />
                         <h1>Welcome</h1>
-                        <p>This is an ancient game with few twists. Destroy your opponent&apos;s King to win.</p>
+                        <p>
+                            This is an ancient game{' '}
+                            <span className={styles.helpLink} onClick={onHelpClick}>
+                                with few twists
+                            </span>
+                            . Destroy your opponent&apos;s King to win.
+                        </p>
                         <button
                             className={styles.button}
                             type="button"
