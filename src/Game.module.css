@@ -213,7 +213,17 @@
 }
 
 .squareBlack .pieceImage {
-    filter: hue-rotate(260deg);
+    filter: hue-rotate(260deg) contrast(120%);
+}
+
+.squareBlack .pieceImage.piece-Q,
+.squareBlack .pieceImage.piece-K {
+    filter: hue-rotate(350deg) saturate(300%);
+}
+
+.squareBlack .pieceImage.piece-R,
+.squareBlack .pieceImage.piece-N {
+    filter: hue-rotate(300deg) saturate(150%);
 }
 
 .logoBackground {
