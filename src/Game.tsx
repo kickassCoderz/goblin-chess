@@ -292,8 +292,8 @@ If you lose the battle your piece is destroyed${
                     <div className={styles.fight}>
                         <h2>Battle mode</h2>
                         <h3 className={styles.fightScore}>
-                            <span className={styles[`fightScore-${Player.White}`]}>{battle.player1Score}</span> -{' '}
-                            <span className={styles[`fightScore-${Player.Black}`]}>{battle.player2Score}</span>
+                            <span className={styles[`fightScore-${battle.player1}`]}>{battle.player1Score}</span> -{' '}
+                            <span className={styles[`fightScore-${battle.player2}`]}>{battle.player2Score}</span>
                         </h3>
                         {isMyBattleTurn && <p className={styles.figthCurrentPlayerText}>Choose your sign</p>}
                         {!isMyBattleTurn && (
