@@ -2,6 +2,12 @@
 
 This is an ancient game with few twists. Destroy your opponent's King to win.
 
+## React Game Jam by Rune
+
+The game won a 3rd place in multiplayer challenge https://reactjam.com/summer-2023-winners
+
+<img width="582" alt="image" src="https://github.com/kickassCoderz/goblin-chess/assets/9803078/53768239-ccf5-4831-9dfc-593af890049e">
+
 ## Credits
 
 ### Music
